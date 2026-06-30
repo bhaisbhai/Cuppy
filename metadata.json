@@ -1,0 +1,6 @@
+{
+  "name": "Concentric Clash Topology",
+  "description": "Live Professional Visualization Engine",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
