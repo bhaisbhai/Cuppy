@@ -348,15 +348,7 @@ export default function App() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[100px]"></div>
       </div>
 
-      {/* Top HUD Panel */}
-      <div className="absolute top-8 left-1/2 -translate-x-1/2 bg-slate-900/40 backdrop-blur-md border border-white/5 p-4 rounded-xl shadow-2xl z-50 pointer-events-none text-center w-[90%] max-w-fit">
-        <div className="text-[10px] uppercase tracking-[0.3em] text-emerald-400 font-bold mb-1">
-          Live Professional Visualization Engine
-        </div>
-        <h1 className="m-0 text-xl md:text-2xl font-black tracking-tighter text-white uppercase">
-          Concentric Clash <span className="text-slate-500">PRO</span>
-        </h1>
-      </div>
+
 
       <div className="relative w-full max-w-[850px] aspect-square flex items-center justify-center mt-16 mb-16 z-10">
         <svg className="absolute top-0 left-0 w-full h-full pointer-events-none z-0" viewBox={`0 0 ${SIZE} ${SIZE}`}>
@@ -456,9 +448,9 @@ export default function App() {
             <div
               key={node.id}
               className={`absolute flex items-center justify-center bg-slate-900 border rounded-full cursor-pointer overflow-hidden transition-all duration-300 ease-out will-change-transform -translate-x-1/2 -translate-y-1/2
-                w-8 h-8
-                sm:w-10 sm:h-10
-                md:w-12 md:h-12
+                w-6 h-6
+                sm:w-8 sm:h-8
+                md:w-10 md:h-10
                 ${isActive
                   ? 'border-emerald-500 shadow-[0_0_20px_rgba(16,185,129,0.4)] scale-125 z-20 border-2'
                   : 'border-white/20 z-10 hover:border-emerald-500/50'
@@ -468,7 +460,7 @@ export default function App() {
               onMouseEnter={() => setHoveredNodeId(node.id)}
               onMouseLeave={() => setHoveredNodeId(null)}
             >
-              <span className="text-3xl sm:text-4xl md:text-5xl select-none pointer-events-none transform scale-160 flex items-center justify-center leading-none">
+              <span className="text-2xl sm:text-3xl md:text-4xl select-none pointer-events-none transform scale-150 flex items-center justify-center leading-none">
                 {node.graphic}
               </span>
             </div>
