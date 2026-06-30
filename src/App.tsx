@@ -251,6 +251,71 @@ function getRadialBracketPath(r1: number, a1: number, r2: number, a2: number, r_
   return `M ${x1} ${y1} L ${x_mid1} ${y_mid1} A ${r_mid} ${r_mid} 0 0 ${sweepFlag} ${x_mid2} ${y_mid2} L ${x2} ${y2}`;
 }
 
+function isPathProgressed(node: Node, nodes: Node[]): boolean {
+  if (node.graphic === "⏳") return false;
+  
+  if (node.id.startsWith("t1-out-")) {
+    const inNode = nodes.find(n => n.id === node.parentId);
+    if (inNode) {
+      const r16Node = nodes.find(n => n.id === inNode.parentId);
+      if (r16Node && r16Node.graphic === node.graphic) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  if (node.id.startsWith("t2-out-")) {
+    const inNode = nodes.find(n => n.id === node.parentId);
+    if (inNode) {
+      const qfNode = nodes.find(n => n.id === inNode.parentId);
+      if (qfNode && qfNode.graphic === node.graphic) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  if (node.id.startsWith("t3-out-")) {
+    const inNode = nodes.find(n => n.id === node.parentId);
+    if (inNode) {
+      // Future-proofing
+    }
+    return false;
+  }
+
+  const parent = nodes.find(n => n.id === node.parentId);
+  if (parent && parent.graphic !== "⏳") {
+    if (parent.graphic === node.graphic) {
+      return true;
+    }
+    
+    if (node.id.startsWith("t1-in-")) {
+      const outerId = node.id.replace("t1-in-", "t1-out-");
+      const outerNode = nodes.find(n => n.id === outerId);
+      if (outerNode && parent.graphic === outerNode.graphic) {
+        return true;
+      }
+    }
+    if (node.id.startsWith("t2-in-")) {
+      const outerId = node.id.replace("t2-in-", "t2-out-");
+      const outerNode = nodes.find(n => n.id === outerId);
+      if (outerNode && parent.graphic === outerNode.graphic) {
+        return true;
+      }
+    }
+    if (node.id.startsWith("t3-in-")) {
+      const outerId = node.id.replace("t3-in-", "t3-out-");
+      const outerNode = nodes.find(n => n.id === outerId);
+      if (outerNode && parent.graphic === outerNode.graphic) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export default function App() {
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const nodes = useMemo(() => generateNodes(), []);
@@ -309,18 +374,35 @@ export default function App() {
             }
             
             const isActive = activePath.has(node.id);
+            const isProg = isPathProgressed(node, nodes);
             const r_mid = (node.r + r2) / 2;
             const pathD = getRadialBracketPath(node.r, node.angle, r2, a2, r_mid);
+
+            let strokeColor = 'rgba(255, 255, 255, 0.22)';
+            let strokeWidth = 1.2;
+            let filterStyle = 'none';
+
+            if (isProg) {
+              strokeColor = 'rgba(16, 185, 129, 0.7)';
+              strokeWidth = 2.5;
+              filterStyle = 'drop-shadow(0 0 6px rgba(16, 185, 129, 0.4))';
+            }
+
+            if (isActive) {
+              strokeColor = '#10b981';
+              strokeWidth = 3.8;
+              filterStyle = 'drop-shadow(0 0 12px rgba(16, 185, 129, 0.85))';
+            }
 
             return (
               <path
                 key={`pipe-${node.id}`}
                 d={pathD}
                 className="fill-none transition-all duration-300 ease-out"
-                stroke={isActive ? '#10b981' : 'rgba(255,255,255,0.2)'}
-                strokeWidth={isActive ? 2 : 0.5}
+                stroke={strokeColor}
+                strokeWidth={strokeWidth}
                 style={{
-                  filter: isActive ? 'drop-shadow(0 0 8px rgba(16,185,129,0.6))' : 'none'
+                  filter: filterStyle
                 }}
               />
             );
